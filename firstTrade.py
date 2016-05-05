@@ -14,15 +14,23 @@ def getFullTicker():
         venue = venue_dict['venue']
         r = requests.get(api + '/venues/' + venue )
         venue_json = r.json()
+        print('===============')
+        print('    ' + venue)
+        print('===============')
         for symbol_dict in venue_json['symbols']:
             symbol = symbol_dict['symbol']
             r = requests.get(api + '/venues/' + venue + '/stocks/' + symbol)
             symbol_json = r.json()
-            print('========== ' + symbol + ' ==========')
-            print('===== ASKS =====')
+            print('==========')
+            print('  ' + symbol)
+            print('==========')
+            print('== ASKS ==')
             print (symbol_json['asks'])
-            print('===== BIDS =====')
+            print('== BIDS ==')
             print (symbol_json['bids'])
+            print('')
+        print('')
+        print('')
 
 def main():
     getFullTicker()
