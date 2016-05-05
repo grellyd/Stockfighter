@@ -44,43 +44,78 @@ def getFullTicker():
     if (heartbeat.noBeat()):
         print('The servers are down. Terminating...')
         exit()
-    venues = getVenueList()
-    for venue in venues:
-        print('==========================')
-        print('       ' + venue)
-        print('==========================')
+    ticker = {}
+    venuesList = getVenueList()
+    symbolListDict = { }
+    asksDictDict = { }
+    bidsDictDict = { }
+    for venue in venuesList:
         symbols = getSymbolList(venue)
+        symbolListDict[venue] = symbols
         for symbol in symbols:
-            print('====================')
-            print('       ' + symbol)
-            print('====================')
             asks = getAsks(venue, symbol)
             bids = getBids(venue, symbol)
-            print('====== ASKS ======')
             if asks:
-                for ask in asks:
-                    qty = ask['qty']
-                    isBuy = ask['isBuy']
-                    price = ask['price']
-                    print("qty: " , qty)
-                    print("isBuy: " , isBuy)
-                    print("price: " , price)
+                asksDictDict[symbol] = asks
             else:
-                print("None")
-            print('====== BIDS ======')
+                asksDictDict[symbol] = None
             if bids:
-                for bid in bids:
-                    qty = bid['qty']
-                    isBuy = bid['isBuy']
-                    price = bid['price']
-                    print("qty: " , qty)
-                    print("isBuy: " , isBuy)
-                    print("price: " , price)
+                bidsDictDict[symbol] = bids
             else:
-                print("None")
+                bidsDictDict[symbol] = None
+    ticker['venuesList'] = venuesList
+    ticker['symbolListDict'] = symbolListDict
+    ticker['asksDictDict'] = asksDictDict
+    ticker['bidsDictDict'] = bidsDictDict
+    return ticker
+
+def prettyPrint(ticker):
+    venuesList = ticker['venuesList']
+    if venuesList:
+        for venue in venuesList:
+            print('==========================')
+            print('       ' + venue)
+            print('==========================')
+            symbolList = ticker['symbolListDict'][venue]
+            if symbolList:
+                for symbol in symbolList:
+                    print('====================')
+                    print('       ' + symbol)
+                    print('====================')
+                    print('====== ASKS ======')
+                    asks = ticker['asksDictDict'][symbol]
+                    if asks:
+                        for ask in asks:
+                                qty = ask['qty']
+                                isBuy = ask['isBuy']
+                                price = ask['price']
+                                print("qty: " , qty)
+                                print("isBuy: " , isBuy)
+                                print("price: " , price)
+                    else:
+                        print("None")
+                    print('====== BIDS ======')
+                    bids = ticker['bidsDictDict'][symbol]
+                    if bids:
+                        for bid in bids:
+                            qty = bid['qty']
+                            isBuy = bid['isBuy']
+                            price = bid['price']
+                            print("qty: " , qty)
+                            print("isBuy: " , isBuy)
+                            print("price: " , price)
+                    else:
+                        print("None")
+                    print('')
+            else:
+                print('SymbolList is NoneType')
             print('')
-        print('')
-        print('')
+            print('')
+    else:
+        print('Venues is NoneType')
             
+def getFirstStock():
+    
+
 if __name__ == "__main__":
-    getFullTicker()
+    prettyPrint(getFullTicker())
