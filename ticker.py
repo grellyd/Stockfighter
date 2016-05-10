@@ -6,38 +6,42 @@ def getVenueList():
     r = requests.get(api + '/venues')
     venues_json = r.json()
     venueList = []
-    for venue_dict in venues_json['venues']:
-        venue = venue_dict['venue']
-        venueList.append(venue)
+    if (r.status_code == requests.codes.ok):
+        for venue_dict in venues_json['venues']:
+            venue = venue_dict['venue']
+            venueList.append(venue)
     return venueList
 
 def getSymbolList(venue):
     r = requests.get(api + '/venues/' + venue + '/stocks')
-    venue_json = r.json()
     symbolList = []
-    for symbol_dict in venue_json['symbols']:
-        symbol = symbol_dict['symbol']
-        symbolList.append(symbol)
+    if (r.status_code == requests.codes.ok):
+        venue_json = r.json()
+        for symbol_dict in venue_json['symbols']:
+            symbol = symbol_dict['symbol']
+            symbolList.append(symbol)
     return symbolList
 
 def getAsks(venue, symbol):
     r = requests.get(api + '/venues/' + venue + '/stocks/' + symbol)
     symbol_json = r.json()
     askList = []
-    asks = symbol_json['asks']
-    if asks is not None:
-        for ask_dict in asks:
-            askList.append(ask_dict)
+    if (r.status_code == requests.codes.ok):
+        asks = symbol_json['asks']
+        if asks is not None:
+            for ask_dict in asks:
+                askList.append(ask_dict)
     return askList
 
 def getBids(venue, symbol):
     r = requests.get(api + '/venues/' + venue + '/stocks/' + symbol)
     symbol_json = r.json()
     bidList = []
-    bids = symbol_json['bids']
-    if bids is not None:
-        for bid_dict in bids:
-            bidList.append(bid_dict)
+    if (r.status_code == requests.codes.ok):
+        bids = symbol_json['bids']
+        if bids is not None:
+            for bid_dict in bids:
+                bidList.append(bid_dict)
     return bidList
 
 def getFullTicker():
@@ -114,8 +118,6 @@ def prettyPrint(ticker):
     else:
         print('Venues is NoneType')
             
-def getFirstStock():
-    
 
 if __name__ == "__main__":
     prettyPrint(getFullTicker())
