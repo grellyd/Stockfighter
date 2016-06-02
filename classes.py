@@ -1,5 +1,11 @@
-import heartbeat, requests
+from enum import Enum
 
+class OrderType(Enum):
+    limit = 'limit'
+    market = 'market'
+    fillkill = 'fill-or-kill'
+    immed = 'immediate-or-cancel'
 
-if __name__ == "__main__":
-    main()
+class OrderDirection(Enum):
+    buy = 'buy'
+    sell = 'sell'

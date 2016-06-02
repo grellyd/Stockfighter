@@ -1,23 +1,13 @@
-import requests, heartbeat, ticker 
-from enum import Enum
+import requests, heartbeat, ticker, json
+from classes import OrderType, OrderDirection
 
-
-class Order(Enum):
-    limit = 'limit'
-    market = 'market'
-    fill = 'fill-or-kill'
-    immed = 'immediate-or-cancel'
-
-class OrderDirection(Enum):
-    buy = 'buy'
-    sell = 'sell'
 
 api = 'https://api.stockfighter.io/ob/api'
 api_key = 'b59767ec5f0716b59c17054c0714f01802afe963'
 
 class Trade:
 
-    def __init__(self, account = '', venue = '', stock = '', price = 0, qty = 0, direction = OrderDirection.buy, orderType = Order.limit):
+    def __init__(self, account = '', venue = '', stock = '', price = 0, qty = 0, direction = OrderDirection.buy, orderType = OrderType.limit):
         # string: trading account id
         self.account = account 
         # string: venue id
@@ -57,16 +47,18 @@ class Trade:
     def execute(self):
         payload = {
                 'account' : self.account,
-                'venue' : self.venue,
-                'stock' : self.stock,
-                'price' : self.price,
                 'qty' : self.qty,
-                'direction' : self.direction,
-                'orderType' : self.orderType
+                'price' : self.price,
+                'direction' : self.direction.value,
+                'orderType' : self.orderType.value
                 }
-        r = requests.post(api + '/venues/' + self.venue + '/stocks/' + self.stock + '/orders X-Starfighter-Authorization:' + api_key, data = payload)
+        headers = {'X-Starfighter-Authorization': api_key}
+        url = api + '/venues/' + self.venue + '/stocks/' + self.stock + '/orders'
+        r = requests.post(url, headers=headers, data=json.dumps(payload))
         return r
 
+    def prt(self):
+        print('Trade: ' + self.direction.value + ' ' + self.orderType.value + ' for ' + str(self.qty) + ' of ' + self.stock + ' on ' + self.venue + ' at ' + str(self.price))
 
 def main():
     t = Trade()
@@ -75,7 +67,8 @@ def main():
     t.setStock('FOOBAR')
     t.setQty(100)
     
-    r = execute(t)
+    t.prt()
+    r = t.execute()
     print(r.text)
 
 
