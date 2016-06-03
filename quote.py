@@ -23,41 +23,31 @@ class Quote:
         headers = {'X-Starfighter-Authorization': api_key}
         url = api + '/venues/' + self.venue + '/stocks/' + self.stock + '/quote'
         r = requests.get(url, headers=headers)
-        self.response = r.json()
+        response = r.json()
+        self.response = response
+        if 'symbol' in response:
+            self.symbol = response['symbol']
+        if 'venue' in response:
+            self.venue = response['venue']
+        if 'bid' in response:
+            self.bid = response['bid']
+        if 'bidSize' in response:
+            self.bidSize = response['bidSize']
+        if 'askSize' in response:
+            self.askSize = response['askSize']
+        if 'bidDepth' in response:
+            self.bidDepth = response['bidDepth']
+        if 'askDepth' in response:
+            self.askDepth = response['askDepth']
+        if 'last' in response:
+            self.last = response['last']
+        if 'lastSize' in response:
+            self.lastSize = response['lastSize']
+        if 'lastTrade' in response:
+            self.lastTrade = response['lastTrade']
+        if 'quoteTime' in response:
+            self.quoteTime = response['quoteTime']
         return r
-
-    def symbol(self):
-        return self.response['symbol']
-
-    def venue(self):
-        return self.response['venue']
-
-    def bid(self):
-        return self.response['bid']
-
-    def bidSize(self):
-        return self.response['bidSize']
-
-    def askSize(self):
-        return self.response['askSize']
-
-    def bidDepth(self):
-        return self.response['bidDepth']
-
-    def askDepth(self):
-        return self.response['askDepth']
-
-    def last(self):
-        return self.response['last']
-
-    def lastSize(self):
-        return self.response['lastSize']
-    
-    def lastTrade(self):
-        return self.response['lastTrade']
-
-    def quoteTime(self):
-        return self.response['quoteTime']
 
 def main():
     t = Quote()
@@ -67,8 +57,8 @@ def main():
     r = t.refresh()
     print(r.text)
 
-    print(t.bid())
-    print(t.last())
+    print(t.bid)
+    print(t.last)
 
 
 if __name__ == "__main__":

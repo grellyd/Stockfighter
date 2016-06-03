@@ -5,14 +5,15 @@ from classes import OrderType
 from classes import OrderDirection
 
 def main():
-    account = 'CAE90253254'
-    venue = 'UWROEX'
-    stock = 'UYCO'
+
+    account = 'WAM16101756'
+    venue = 'SYTEX'
+    stock = 'TMH'
     price = 3200
     qty = 1000
     direction = OrderDirection.buy
-    orderType = OrderType.fillkill
-    waitTime = 1
+    orderType = OrderType.limit
+    waitTime = 10
     oldPrice = 0
 
     trade = Trade(account, venue, stock, price, qty, direction, orderType)
@@ -22,11 +23,11 @@ def main():
     while (vol < 100000):
         quote.refresh()
         price = choosePrice(quote, trade)
-        if (price == 2608 or price > 2608):
-            waitTime = 20
-            price = 1700
-        else:
-            waitTime = 1
+       # if (price == 2608 or price > 2608):
+       #     waitTime = 20
+       #     price = 1700
+       # else:
+       #     waitTime = 1
         trade.setPrice(price)
         trade.setQty(quote.lastSize() + 5)
         trade.prt()
