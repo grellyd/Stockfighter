@@ -13,41 +13,49 @@ class Quote:
         # string: stock id
         self.stock = stock 
 
-    def setVenue(self, venue):
-        self.venue = venue
-
-    def setStock(self, stock):
-        self.stock = stock
-
     def refresh(self):
         headers = {'X-Starfighter-Authorization': api_key}
         url = api + '/venues/' + self.venue + '/stocks/' + self.stock + '/quote'
         r = requests.get(url, headers=headers)
-        response = r.json()
-        self.response = response
-        if 'symbol' in response:
-            self.symbol = response['symbol']
-        if 'venue' in response:
-            self.venue = response['venue']
-        if 'bid' in response:
-            self.bid = response['bid']
-        if 'bidSize' in response:
-            self.bidSize = response['bidSize']
-        if 'askSize' in response:
-            self.askSize = response['askSize']
-        if 'bidDepth' in response:
-            self.bidDepth = response['bidDepth']
-        if 'askDepth' in response:
-            self.askDepth = response['askDepth']
-        if 'last' in response:
-            self.last = response['last']
-        if 'lastSize' in response:
-            self.lastSize = response['lastSize']
-        if 'lastTrade' in response:
-            self.lastTrade = response['lastTrade']
-        if 'quoteTime' in response:
-            self.quoteTime = response['quoteTime']
+        self.response = r.json()
+        if 'symbol' in self.response:
+            self.symbol = self.response['symbol']
+        if 'venue' in self.response:
+            self.venue = self.response['venue']
+        if 'bid' in self.response:
+            self.bid = self.response['bid']
+        if 'bidSize' in self.response:
+            self.bidSize = self.response['bidSize']
+        if 'bidDepth' in self.response:
+            self.bidDepth = self.response['bidDepth']
+        if 'ask' in self.response:
+            self.ask = self.response['ask']
+        if 'askSize' in self.response:
+            self.askSize = self.response['askSize']
+        if 'askDepth' in self.response:
+            self.askDepth = self.response['askDepth']
+        if 'last' in self.response:
+            self.last = self.response['last']
+        if 'lastSize' in self.response:
+            self.lastSize = self.response['lastSize']
+        if 'lastTrade' in self.response:
+            self.lastTrade = self.response['lastTrade']
+        if 'quoteTime' in self.response:
+            self.quoteTime = self.response['quoteTime']
         return r
+
+    def prt(self):
+        print('symbol: ' + str(self.symbol))
+        print('venue: ' + str(self.venue))
+        print('bid: ' + str(self.bid))
+        print('bidSize: ' + str(self.bidSize))
+        print('bidDepth: ' + str(self.bidDepth))
+        print('ask: ' + str(self.ask))
+        print('askSize: ' + str(self.askSize))
+        print('askDepth: ' + str(self.askDepth))
+        print('last: ' + str(self.last))
+        print('lastSize: ' + str(self.lastSize))
+        print('quoteTime: ' + str(self.quoteTime))
 
 def main():
     t = Quote()
@@ -59,6 +67,7 @@ def main():
 
     print(t.bid)
     print(t.last)
+    t.prt()
 
 
 if __name__ == "__main__":

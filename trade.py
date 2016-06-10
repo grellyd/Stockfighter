@@ -1,7 +1,7 @@
 import requests, heartbeat, ticker, json
 from classes import OrderType, OrderDirection
 
-
+MAX_ATTEMPTS = 5
 api = 'https://api.stockfighter.io/ob/api'
 api_key = 'b59767ec5f0716b59c17054c0714f01802afe963'
 
@@ -44,7 +44,7 @@ class Trade:
     def setOrderType(self, orderType):
         self.orderType = orderType
 
-    def execute(self):
+    def execute(self, attempt = 0):
         payload = {
                 'account' : self.account,
                 'qty' : self.qty,
@@ -55,6 +55,16 @@ class Trade:
         headers = {'X-Starfighter-Authorization': api_key}
         url = api + '/venues/' + self.venue + '/stocks/' + self.stock + '/orders'
         r = requests.post(url, headers=headers, data=json.dumps(payload))
+        if (r.status_code != requests.codes.ok):
+            if (attempt < MAX_ATTEMPTS):
+                print('Trade Attempt %d Failed. Trying Again...' % attempt)
+                attempt += 1
+                self.execute(attempt)
+            else:
+                print('Tried 5 times and did not succeed.')
+                print('Reason: TODO')
+        else:
+            print('Trade Successful')
         return r
 
     def prt(self):

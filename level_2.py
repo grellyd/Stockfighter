@@ -1,9 +1,9 @@
 import trade, requests, time
 
 def main():
-    account = 'DBL27132229'
-    venue = 'GULBEX'
-    stock = 'MEM'
+    account = 'LWN8306966'
+    venue = 'CNAEX'
+    stock = 'HIJ'
     price = 3200
     qty = 1000
 

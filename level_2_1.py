@@ -6,9 +6,9 @@ from classes import OrderDirection
 
 def main():
 
-    account = 'WAM16101756'
-    venue = 'SYTEX'
-    stock = 'TMH'
+    account = 'LWN8306966'
+    venue = 'CNAEX'
+    stock = 'HIJ'
     price = 3200
     qty = 1000
     direction = OrderDirection.buy
@@ -29,18 +29,19 @@ def main():
        # else:
        #     waitTime = 1
         trade.setPrice(price)
-        trade.setQty(quote.lastSize() + 5)
+        trade.setQty(quote.lastSize + 5)
         trade.prt()
         response = trade.execute()
         vol += qty
         time.sleep(waitTime)
 
 def choosePrice(quote, trade):
+    quote.prt()
     price = trade.price
-    if (price == quote.last()):
+    if (price == quote.last):
         price += 10
     else:
-        price = quote.last()
+        price = quote.last
     return price
 
 if __name__ == "__main__":

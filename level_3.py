@@ -6,9 +6,9 @@ from classes import OrderDirection
 
 def main():
 
-    account = 'SL57308766'
-    venue = 'UDRYEX'
-    stock = 'AREI'
+    account = 'CLS8002286'
+    venue = 'VXEX'
+    stock = 'KCYE'
     price = 0
     qty = 0
     direction = OrderDirection.buy
@@ -22,6 +22,31 @@ def main():
     # buy low, sell high
     # track stocks owned, and exposure (value per last trade)
 
+
+    while (True):
+        # get the spread
+        quote.refresh()
+        quote.prt()
+        # work the spread
+        trade.orderType = OrderType.limit
+
+        if (quote.bid is not None and quote.ask is not None):
+            # buy at the bid + 1
+            trade.direction = OrderDirection.buy
+            trade.price = quote.bid + 5
+            trade.qty = quote.bidSize
+            trade.prt()
+            trade.execute()
+
+            # sell at the ask - 1
+            trade.direction = OrderDirection.sell
+            trade.price = quote.ask - 5
+            trade.size = quote.askSize
+            trade.prt()
+            trade.execute()
+
+        time.sleep(2)
+
     # when the quote last price is low, purchase and increase order size
     # when the quote last price is high, sell and decrease order size
 
@@ -31,39 +56,6 @@ def main():
     # have very low limit buy and immed buy
     # have very high limit sell and immed sell
 
-    while(True):
-        quote.refresh()
-        bigLimits(quote, trade)
-        i = 0
-        while (i < 30):
-            trade.orderType = OrderType.immed
-            trade.price = quote.bid + 5
-            trade.direction = OrderDirection.buy
-            trade.setQty(4)#max(quote.lastSize - 5, 1))
-            trade.execute()
-            trade.prt()
-
-            trade.price = quote.last + 5
-            trade.direction = OrderDirection.sell
-            trade.setQty(4) #max(quote.lastSize - 5, 1))
-            trade.execute()
-            trade.prt()
-            i += 1
-            time.sleep(waitTime)
-
-
-
-#    vol = 0
-#    while (vol < 100000):
-#        quote.refresh()
-#        price = choosePrice(quote, trade)
-#
-#        trade.setPrice(price)
-#        trade.setQty(quote.lastSize + 5)
-#        trade.prt()
-#        response = trade.execute()
-#        vol += qty
-#        time.sleep(waitTime)
 
 def bigLimits(quote, trade):
     trade.setOrderType = OrderType.limit
